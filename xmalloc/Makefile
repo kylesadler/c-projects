@@ -1,6 +1,6 @@
 CFLAGS = -Wall -pedantic -std=c99
 
-ALL = demo1 demo2
+ALL = xmalloc-demo-1 xmalloc-demo-2
 
 OFILES_1 = xmalloc-demo-1.o xmalloc.o
 OFILES_2 = xmalloc-demo-2.o xmalloc.o
@@ -9,10 +9,10 @@ CC = gcc
 
 all: $(ALL)
 
-demo1: $(OFILES_1)
+xmalloc-demo-1: $(OFILES_1)
 	$(CC) $(OFILES_1) -o $@
 
-demo2: $(OFILES_2)
+xmalloc-demo-2: $(OFILES_2)
 	$(CC) $(OFILES_2) -o $@
 
 clean:

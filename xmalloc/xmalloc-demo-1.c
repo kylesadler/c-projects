@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 void allocateAndFree(int numBytes) {
+    printf("Allocating %d bytes.\n", numBytes);
     void *x = xmalloc(numBytes);
-    printf("Allocated %d bytes.\n", numBytes);
     free(x);
     printf("Freed %d bytes.\n", numBytes);
 }
