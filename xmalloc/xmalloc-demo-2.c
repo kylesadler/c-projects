@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 int main () {
-    int numBytes = 1000000;
+    int numBytes = 1000*1000*1000;
     while(true) {
         printf("Allocating %d bytes.\n", numBytes);
         xmalloc(numBytes);
