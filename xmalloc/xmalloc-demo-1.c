@@ -8,7 +8,6 @@ void allocateAndFree(int numBytes) {
     printf("Freed %d bytes.\n", numBytes);
 }
 
-
 int main() {
     allocateAndFree(1000);
     allocateAndFree(0);
