@@ -1,18 +1,16 @@
-CFLAGS = -Wall -pedantic -std=c99 src/util.c
+CFLAGS = -Wall -pedantic -std=c99
+ALL = findroots printprimes sum
 
-homework1: src/findroots.c src/printprimes.c src/sum.c src/util.h
-	make findroots
-	make printprimes
-	make sum
+all: $(ALL)
 
 findroots: src/findroots.c src/util.h
-	gcc $(CFLAGS) src/findroots.c -o findroots
+	gcc $(CFLAGS) src/util.c src/findroots.c -o findroots
 
 printprimes: src/printprimes.c src/util.h
-	gcc $(CFLAGS) src/printprimes.c -o printprimes
+	gcc $(CFLAGS) src/util.c src/printprimes.c -o printprimes
 	
 sum: src/sum.c src/util.h
-	gcc $(CFLAGS) src/sum.c -o sum
+	gcc $(CFLAGS) src/util.c src/sum.c -o sum
 
 clean:
 	rm -f sum printprimes findroots
