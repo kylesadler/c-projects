@@ -1,2 +1,0 @@
-Textbook page 52. 7.5: Project Xmalloc
-
