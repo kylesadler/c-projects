@@ -13,4 +13,4 @@ sum: src/sum.c src/util.h
 	gcc $(CFLAGS) src/util.c src/sum.c -o sum
 
 clean:
-	rm -f sum printprimes findroots
+	rm -f $(ALL)
