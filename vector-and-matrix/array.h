@@ -9,7 +9,7 @@
 #define make_matrix(a, m, n) do { 							\
 	size_t make_matrix_loop_counter;						\
 	make_vector(a, (m) + 1);								\
-	for (make_matrix_loop_counter == 0;						\
+	for (make_matrix_loop_counter = 0;						\
 	make_matrix_loop_counter < (m);							\
 	make_matrix_loop_counter++)								\
 		make_vector((a)[make_matrix_loop_counter], (n));	\
