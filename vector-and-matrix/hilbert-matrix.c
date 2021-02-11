@@ -19,6 +19,8 @@ int main() {
     int n = 8;
     H = hilbert_matrix(n);
     
+    printf("\nPrinting manually:\n");
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             printf("%f ", H[i][j]);
@@ -26,7 +28,7 @@ int main() {
         printf("\n");
     }
 
-    printf("\n\n\n");
+    printf("\nUsing print_matrix():\n");
     print_matrix("%f ", H, n, n);
 
     free_matrix(H);
