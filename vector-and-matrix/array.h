@@ -21,7 +21,6 @@
 	putchar('\n');											\
 } while (0)
 
-
 /* 
 	Matrix functions
  */
@@ -121,7 +120,7 @@
 	}														\
 } while (0)
 
-// prints an n x m 4array a using format fmt (string formatting each value)
+// prints an (m x n x k x i) 4array a using format fmt (string formatting each value)
 #define print_4array(fmt, a, m, n, k, i) do {						\
 	size_t print_4array_loop_counter;						\
 	for (print_4array_loop_counter = 0;						\
