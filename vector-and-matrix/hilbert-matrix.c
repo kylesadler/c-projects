@@ -26,6 +26,9 @@ int main() {
         printf("\n");
     }
 
+    printf("\n\n\n");
+    print_matrix("%f ", H, n, n);
+
     free_matrix(H);
     return 0;
 }
