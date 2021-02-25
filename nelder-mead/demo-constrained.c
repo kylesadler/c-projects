@@ -4,8 +4,10 @@
 // f(x,y, x) = x^2 + y^2 + z^2
 static double obj_func(double *x, int n, void *params)
 {
-	return x[0]*x[0] + x[1]*x[1] - 4*x[0] - 2*x[1] + 8;
+	return x[0]*x[0] + x[1]*x[1] + x[2]*x[2];
 }
+
+// TODO 
 int main(void)
 {
 	double x[] = { 0.0, 0.0 };	// the initial point

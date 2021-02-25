@@ -2,12 +2,11 @@
 #include "nelder-mead.h"
 
 // f(x,y) = 3 + (x-2)^2 + (y-1)^2 = x^2 + y^2 - 4x - 2y + 8
-static double obj_func(double *x, int n, void *params)
-{
+static double obj_func(double *x, int n, void *params) {
 	return x[0]*x[0] + x[1]*x[1] - 4*x[0] - 2*x[1] + 8;
 }
-int main(void)
-{
+
+int main(void) {
 	double x[] = { 0.0, 0.0 };	// the initial point
 	int evalcount;
 	struct nelder_mead NM = {	// Alert! C99-style initialization!
