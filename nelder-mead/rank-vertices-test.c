@@ -31,7 +31,7 @@ static inline void rank_vertices(double *v, int m,
 	} 
 	
 	// temp variable for swapping values
-        int temp;
+	int temp;
 	
 	/*  initialize ia, iy, iz  */
 	if (v[0] > v[1]) {

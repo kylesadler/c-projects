@@ -11,6 +11,7 @@ struct nelder_mead {
 	double mineval;	// the computed minimym value
 	void *params;	// parameters passed to f()
 };
-int nelder_mead(struct nelder_mead *nm);
-#endif
 
+int nelder_mead(struct nelder_mead *nm);
+
+#endif /* H_NELDER_MEAD_H */
