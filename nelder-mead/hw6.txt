@@ -1,0 +1,12 @@
+
+
+In 18.7: Project Nelder-Mead: Unconstrained Optimization
+
+Part 18.1
+
+Part 18.3
+
+
+In 18.8: Project Nelder-Mead: Constrained Optimization
+
+Part 18.4

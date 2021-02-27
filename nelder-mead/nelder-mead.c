@@ -42,7 +42,7 @@ static void get_centroid(double **s, int n, int iz, double *C)
 /* Given points P and Q in R^n and a scalar beta,
  * find point R such PR = beta PQ.
 */
-static void inline transform(double *P, double *Q, int n, double beta, double *R)
+static inline void transform(double *P, double *Q, int n, double beta, double *R)
 {
 	R[j] = (1 - beta)*P[j] + beta*Q[j];
 }
