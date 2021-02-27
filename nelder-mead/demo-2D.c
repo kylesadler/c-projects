@@ -8,6 +8,7 @@ static double obj_func(double *x, int n, void *params) {
 
 int main(void) {
 	double x[] = { 0.0, 0.0 };	// the initial point
+
 	int evalcount;
 	struct nelder_mead NM = {	// Alert! C99-style initialization!
 		.f		= obj_func,	// the objective function
@@ -27,7 +28,7 @@ int main(void) {
 		printf("converged after %d function evaluations\n",
 				evalcount);
 		printf("Computed solution: min = %g at (%g, %g)\n",
-				NM.mineval, x[0], x[1]);
+				NM.mineval, x[0], x[1]); // should be min = 3 at (2, 1)
 	}
 	return 0;
 }

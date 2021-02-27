@@ -50,6 +50,17 @@
     }                                                       \
 } while (0)
 
+// prints an n-length 3array v using format fmt (string formatting each value)
+#define print_3array(fmt, a, n, m, k) do {						\
+	size_t print_3array_loop_counter;						\
+	for (print_3array_loop_counter = 0;						\
+			print_3array_loop_counter < (k);				\
+			print_3array_loop_counter++)					\
+			print_matrix(fmt, (a)[print_3array_loop_counter], (n), (m));	\
+	putchar('\n');											\
+} while (0)
+
+
 #define make_4array(a, m, n, k, l) do {                     \
     size_t make_4array_loop_counter;                        \
     make_vector(a, (m) + 1);                                \
@@ -71,6 +82,17 @@
         a = NULL;                                           \
     }                                                       \
 } while (0)
+
+// prints an (m x n x k x i) 4array a using format fmt (string formatting each value)
+#define print_4array(fmt, a, m, n, k, i) do {						\
+	size_t print_4array_loop_counter;						\
+	for (print_4array_loop_counter = 0;						\
+			print_4array_loop_counter < (i);				\
+			print_4array_loop_counter++)					\
+		print_3array(fmt, (a)[print_4array_loop_counter], (m), (n), (k));\
+	putchar('\n');											\
+} while (0)
+
 
 #define print_vector(fmt, v, n) do {                        \
     size_t print_vector_loop_counter;                       \

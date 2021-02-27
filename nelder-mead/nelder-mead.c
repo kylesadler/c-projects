@@ -111,7 +111,7 @@ static int done(double **s, int n, double *y, int ia, int iz, double err2) {
 int nelder_mead(struct nelder_mead *nm) {
 	double **s = nm->s;
 	int n = nm->n;
-	double** x = nm->x;
+	double* x = nm->x;
 	double h = nm->h;
 	double tol = nm->tol;
 	double err2 = (h*tol)*(h*tol);
@@ -120,6 +120,10 @@ int nelder_mead(struct nelder_mead *nm) {
 	int ia, iy, iz;
 	int simplex_to_be_freed = 0;
 	int fevalcount;
+
+	// temporary variables for cases 3 + 4
+	double* point;
+	double y_value;
 
 	make_vector(y, n+1);	// vertex values
 	make_vector(Pr, n);	// the reflected point $x^{(r)}$
@@ -135,24 +139,34 @@ int nelder_mead(struct nelder_mead *nm) {
 		for (int i = 0; i < n + 1; i++) {
 			for (int j = 0; j < n; j++) {
 				if (j == i - 1) {
-					s[i][j] = *x[j] + h;
+					s[i][j] = x[j] + h;
 				} else {
-					s[i][j] = *x[j];
+					s[i][j] = x[j];
 				}
 			}
 		}
+
+		// print_vector("%f ", x, n);
+		// printf("%f %f\n", x[0], x[1]);
+		// printf("%f \n", h);
+		// print_matrix("%f ", s, n+1, n);
 	}
 	
 	for (int i = 0; i < n + 1; i++)
 		y[i] = nm->f(s[i], n, nm->params);
 	fevalcount = n+1;
+	// print_vector("%f ", y, n+1);
 
 	while (fevalcount <= nm->maxevals) {
 
 		rank_vertices(y, n+1, &ia, &iy, &iz);
+		// printf("%d %d %d\n", ia, iy, iz);
 
 		if (done(s, n, y, ia, iz, err2)) {
-			*x = s[ia]; // COPY THE BEST VERTEX INTO THE VECTOR NM-X ...
+			// COPY THE BEST VERTEX INTO THE VECTOR NM-X ...
+			for (int i = 0; i < n; i++) {
+				nm->x[i] = s[ia][i];
+			}
 			nm->mineval = y[ia];
 			break;
 		}
@@ -177,29 +191,33 @@ int nelder_mead(struct nelder_mead *nm) {
 		
 		} else if (yr < y[iy]) { // CASE 2...
 			replace_row(s, iz, &Pr);
+			y[iz] = yr;
 
 		} else { // CASE 3-4...
-			
-			if (yr < y[iz]) { // CASE 3
-				transform(C, Pr, n, CONTRACT, Pc);
-				yc = nm->f(Pc, n, nm->params);
-				fevalcount++;
-				if (yc < yr) {
-					replace_row(s, iz, &Pc);
-				} else {
-					shrink(s, n, ia);
-				}
 
+			if (yr < y[iz]) {	// CASE 3
+				point = Pr;
+				y_value = yr;
+			} else {			// CASE 4
+				point = s[iz];
+				y_value = y[iz];
+			}
+
+			transform(C, point, n, CONTRACT, Pc);
+			yc = nm->f(Pc, n, nm->params);
+			fevalcount++;
+
+			if (yc < y_value) {
+				replace_row(s, iz, &Pc);
+				y[iz] = yc;
 			} else {
-				transform(C, s[iz], n, CONTRACT, Pc);
-				yc = nm->f(Pc, n, nm->params);
-				fevalcount++;
-				if (yc < y[iz]) {
-					replace_row(s, iz, &Pc);
-				} else {
-					shrink(s, n, ia);
+				shrink(s, n, ia);
+				for (int i = 0; i < n + 1; i++) {
+					if (i != ia) {
+						y[i] = nm->f(s[i], n, nm->params);
+						fevalcount++;
+					}
 				}
-				
 			}
 
 		}

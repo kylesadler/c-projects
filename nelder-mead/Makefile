@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -pedantic -std=c99
+CFLAGS = -Wall -pedantic -std=c99 -O2
 LIBS = -lm
 ALL = rank-vertices-test demo-1D demo-2D demo-constrained demo-energy
 
@@ -8,19 +8,19 @@ OFILES = nelder-mead.o xmalloc.o
 all: $(ALL)
 
 rank-vertices-test: rank-vertices-test.c
-	$(CC) rank-vertices-test.c -o $@
+	$(CC) $(CFLAGS) rank-vertices-test.c -o $@
 
 demo-1D: $(OFILES)
-	$(CC) $@.c $(OFILES) -o $@
+	$(CC) $(CFLAGS) $@.c $(OFILES) -o $@
 
 demo-2D: $(OFILES)
-	$(CC) $@.c $(OFILES) -o $@
+	$(CC) $(CFLAGS) $@.c $(OFILES) -o $@
 
 demo-constrained: $(OFILES)
-	$(CC) $@.c $(OFILES) -o $@
+	$(CC) $(CFLAGS) $@.c $(OFILES) -o $@
 
 demo-energy: $(OFILES)
-	$(CC) $@.c $(OFILES) -o $@
+	$(CC) $(CFLAGS) $@.c $(OFILES) -o $@
 
 clean:
 	rm -f $(ALL) demo-1D.o demo-2D.o demo-constrained.o demo-energy.o nelder-mead.o xmalloc.o
