@@ -1,3 +1,9 @@
+nelder-mead/demo-1D
+nelder-mead/demo-2D
+nelder-mead/demo-energy
+nelder-mead/demo-constrained
+nelder-mead/rank-vertices-test
+
 *.zip
 *.pdf
 *.DS_Store
