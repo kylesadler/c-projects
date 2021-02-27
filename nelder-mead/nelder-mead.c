@@ -145,22 +145,15 @@ int nelder_mead(struct nelder_mead *nm) {
 				}
 			}
 		}
-
-		// print_vector("%f ", x, n);
-		// printf("%f %f\n", x[0], x[1]);
-		// printf("%f \n", h);
-		// print_matrix("%f ", s, n+1, n);
 	}
 	
 	for (int i = 0; i < n + 1; i++)
 		y[i] = nm->f(s[i], n, nm->params);
 	fevalcount = n+1;
-	// print_vector("%f ", y, n+1);
 
 	while (fevalcount <= nm->maxevals) {
 
 		rank_vertices(y, n+1, &ia, &iy, &iz);
-		// printf("%d %d %d\n", ia, iy, iz);
 
 		if (done(s, n, y, ia, iz, err2)) {
 			// COPY THE BEST VERTEX INTO THE VECTOR NM-X ...
