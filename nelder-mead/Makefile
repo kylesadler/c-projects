@@ -2,6 +2,8 @@ CC = gcc
 CFLAGS = -Wall -pedantic -std=c99
 ALL = rank-vertices-test nelder-mead demo-1D demo-2D demo-constrained demo-energy
 
+# add -lm for math library 
+
 all: $(ALL)
 
 clean:

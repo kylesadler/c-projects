@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <math.h>
 #include "array.h"
 #include "nelder-mead.h"
 
@@ -12,14 +13,10 @@
    the space,) and computes the indices iz, iy, ia corresponding to the highest,
    next-to-highest and lowest entries.
 */
-static inline void rank_vertices(double *v, int m,
-		int *ia, int *iy, int *iz)
-{
-	int i;
-
-	*ia = *iy = 0; 
+static inline void rank_vertices(double *v, int m, int *ia, int *iy, int *iz) {
+	*ia = *iy = 0;
 	*iz = 1;
-	for (i = 1; i < m; i++) {
+	for (int i = 1; i < m; i++) {
 		if (v[i] < v[*ia]) {
 			*ia = i;
 		} else if (v[i] >= v[*iz]) {
@@ -34,29 +31,47 @@ static inline void rank_vertices(double *v, int m,
    the centroid C[] of the face opposite the vertex iz.  We do a bit of
    extra work to enable row-wise access to arrays.
 */
-static void get_centroid(double **s, int n, int iz, double *C)
-{
+static void get_centroid(double **s, int n, int iz, double *C) {
+	for (int j = 0; j < n; j++) {
+		C[j] = 0;
+	}
 
+	for (int i = 0; i < n+1; i++) {
+		if (i != iz) {
+			for (int j = 0; j < n; j++) {
+				C[j] += s[i][j];
+			}
+		} 
+	}
+
+	for (int j = 0; j < n; j++) {
+		C[j] /= n;
+	}
 }
 
 /* Given points P and Q in R^n and a scalar beta,
  * find point R such PR = beta PQ.
 */
-static inline void transform(double *P, double *Q, int n, double beta, double *R)
-{
-	R[j] = (1 - beta)*P[j] + beta*Q[j];
+static inline void transform(double *P, double *Q, int n, double beta, double *R) {
+	for (int j = 0; j < n; j++) {
+		R[j] = (1 - beta)*P[j] + beta*Q[j];
+	}
 }
 	
 /* Shrinks the simplex given by s by a factor of SHRINK toward vertex ia */
-static void shrink(double **s, int n, int ia)
-{
-	transform(s[ia], s[i], n, SHRINK, s[i]);
+static void shrink(double **s, int n, int ia) {
+	for (int i = 0; i < n + 1; i++) {
+		if (i != ia) {
+			transform(s[ia], s[i], n, SHRINK, s[i]);
+		}
+	}
 }
 
 /* replaces (swaps) row i of matrix s with vector *r */
-static void inline replace_row(double **s, int i, double **r)
-{
-
+static void inline replace_row(double **s, int i, double **r) {
+	double* temp = s[i];
+	s[i] = *r;
+	*r = temp;
 }
 
 /* Are were there yet?
@@ -66,16 +81,23 @@ static void inline replace_row(double **s, int i, double **r)
    and
        b) distance between the ia and iz vertices drops below h*tol.
 */
-static int done(double **s, int n,
-		double *y, int ia, int iz, double err2)
-{
-
+static bool done(double **s, int n, double *y, int ia, int iz, double err2) {
+	return distanceSquared(s[iz], s[ia], n) < err2 && fabs(y[iz] - y[ia]) <= err2;
 }
 
-int nelder_mead(struct nelder_mead *nm)
-{
+static double distanceSquared(double* a, double* b, int n) {
+	double output = 0;
+	for (int i = 0; i < n; i++) {
+		output += (a[i]-b[i]) * (a[i]-b[i]);
+	}
+	return output;
+}
+
+
+int nelder_mead(struct nelder_mead *nm) {
 	double **s = nm->s;
 	int n = nm->n;
+	double** x = nm->x;
 	double h = nm->h;
 	double tol = nm->tol;
 	double err2 = (h*tol)*(h*tol);
@@ -95,7 +117,16 @@ int nelder_mead(struct nelder_mead *nm)
 	if (s == NULL) {	// build simplex if not supplied by user
 		make_matrix(s, n+1, n);
 		simplex_to_be_freed = 1;
-		ASSIGN VALUES TO S[I][J] ...
+
+		// construct initial simplex
+		for (int i = 0; i < n + 1; i++) {
+			for (int j = 0; j < n; j++) {
+				if (j == i - 1) {
+					s[i][j] = *x[j] + h;
+				} else {
+					s[i][j] = *x[j];
+				}
+			}
 		}
 	}
 	
@@ -108,7 +139,7 @@ int nelder_mead(struct nelder_mead *nm)
 		rank_vertices(y, n+1, &ia, &iy, &iz);
 
 		if (done(s, n, y, ia, iz, err2)) {
-                        COPY THE BEST VERTEX INTO THE VECTOR NM-X ...
+			*x = s[ia]; // COPY THE BEST VERTEX INTO THE VECTOR NM-X ...
 			nm->minval = y[ia];
 			break;
 		}
