@@ -30,15 +30,28 @@ static inline void rank_vertices(double *v, int m,
 		return;
 	} 
 	
-	*ia = *iy = 0;
-	*iz = 1;
-	for (int i = 1; i < m; i++) {
-		if (v[i] < v[*ia]) {
+	/*  initialize ia, iy, iz  */
+	if (v[0] > v[1]) {
+		*ia = 1;
+		*iy = 1;
+		*iz = 0;
+	} else {
+		*ia = 0;
+		*iy = 0;
+		*iz = 1;
+	}
+
+	/*  try to find better ia, iy, iz  */
+	for (int i = 0; i < m; i++) {
+		if (v[i] < v[*ia])
 			*ia = i;
-		} else if (v[i] >= v[*iz]) {
+		
+		if (v[i] > v[*iz]) {
 			*iy = *iz;
 			*iz = i;
-		} else if (v[i] >= v[*iy])
+		}
+		
+		if (v[i] >= v[*iy] && *iz != i)
 			*iy = i;
 	}
 }

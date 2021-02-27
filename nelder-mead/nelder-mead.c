@@ -14,15 +14,28 @@
    next-to-highest and lowest entries.
 */
 static inline void rank_vertices(double *v, int m, int *ia, int *iy, int *iz) {
-	*ia = *iy = 0;
-	*iz = 1;
-	for (int i = 1; i < m; i++) {
-		if (v[i] < v[*ia]) {
+	/*  initialize ia, iy, iz  */
+	if (v[0] > v[1]) {
+		*ia = 1;
+		*iy = 1;
+		*iz = 0;
+	} else {
+		*ia = 0;
+		*iy = 0;
+		*iz = 1;
+	}
+
+	/*  try to find better ia, iy, iz  */
+	for (int i = 0; i < m; i++) {
+		if (v[i] < v[*ia])
 			*ia = i;
-		} else if (v[i] >= v[*iz]) {
+		
+		if (v[i] > v[*iz]) {
 			*iy = *iz;
 			*iz = i;
-		} else if (v[i] >= v[*iy])
+		}
+		
+		if (v[i] >= v[*iy] && *iz != i)
 			*iy = i;
 	}
 }
@@ -107,7 +120,6 @@ int nelder_mead(struct nelder_mead *nm) {
 	int ia, iy, iz;
 	int simplex_to_be_freed = 0;
 	int fevalcount;
-	// int i, j;
 
 	make_vector(y, n+1);	// vertex values
 	make_vector(Pr, n);	// the reflected point $x^{(r)}$

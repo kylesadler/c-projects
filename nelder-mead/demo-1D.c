@@ -27,7 +27,7 @@ int main(void) {
 		printf("converged after %d function evaluations\n",
 				evalcount);
 		printf("Computed solution: min = %g at (%g, %g)\n",
-				NM.minval, x[0], x[1]);
+				NM.mineval, x[0], x[1]);
 	}
 	return 0;
 }
