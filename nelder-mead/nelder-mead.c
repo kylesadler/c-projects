@@ -183,6 +183,7 @@ int nelder_mead(struct nelder_mead *nm) {
 			if (yr < y[iz]) { // CASE 3
 				transform(C, Pr, n, CONTRACT, Pc);
 				yc = nm->f(Pc, n, nm->params);
+				fevalcount++;
 				if (yc < yr) {
 					replace_row(s, iz, &Pc);
 				} else {
@@ -192,6 +193,7 @@ int nelder_mead(struct nelder_mead *nm) {
 			} else {
 				transform(C, s[iz], n, CONTRACT, Pc);
 				yc = nm->f(Pc, n, nm->params);
+				fevalcount++;
 				if (yc < y[iz]) {
 					replace_row(s, iz, &Pc);
 				} else {
