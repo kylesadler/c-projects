@@ -85,3 +85,70 @@ struct problem_spec *heat2(void)
 	return &spec;
 }
 
+
+
+
+
+
+static double heat3_ic(double x)
+{
+	return fabs(x) < 0.4? 1.0 : 0.0;
+}
+
+static double heat3_bcL(double t)
+{
+	return 0.0;
+}
+
+static double heat3_bcR(double t)
+{
+	return 0.0;
+}
+
+struct problem_spec *heat3(void)
+{
+	static struct problem_spec spec = {	// C99-style initialization!
+		.a		= -1.0,
+		.b		=  1.0,
+		.ic		= heat3_ic,
+		.bcL		= heat3_bcL,
+		.bcR		= heat3_bcR,
+		.u_exact	= NULL,
+	};
+	printf("problem heat3:\n");
+	return &spec;
+}
+
+
+
+
+
+static double heat4_ic(double x)
+{
+	return 0.0;
+}
+
+static double heat4_bcL(double t)
+{
+	return 0.0;
+}
+
+static double heat4_bcR(double t)
+{
+	return 0.8;
+}
+
+struct problem_spec *heat4(void)
+{
+	static struct problem_spec spec = {	// C99-style initialization!
+		.a		= -1.0,
+		.b		=  1.0,
+		.ic		= heat4_ic,
+		.bcL		= heat4_bcL,
+		.bcR		= heat4_bcR,
+		.u_exact	= NULL,
+	};
+	printf("problem heat4:\n");
+	return &spec;
+}
+
