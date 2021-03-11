@@ -6,8 +6,8 @@
 static double heat1_exact(double x, double t)
 {
 	double Pi = 4*atan(1);
-	// return exp(-Pi*Pi/4*t) * cos(Pi/2*x);
-	return exp(-Pi*Pi/2*t) * cos(Pi/2*x);
+	return exp(-Pi*Pi/4*t) * cos(Pi/2*x);
+	// return exp(-Pi*Pi/2*t) * cos(Pi/2*x);
 }
 
 static double heat1_ic(double x)
