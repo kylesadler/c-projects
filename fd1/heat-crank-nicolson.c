@@ -6,9 +6,7 @@
 
 // Solves the nxn tridiagonal system Ax=b, where d is the main diagonal,
 // a is the lower subdiagonal, c is the upper subdiagonal.
-static void trisolve(int n, double *a, double *d, double *c, double *b,
-		double *x)
-{
+static void trisolve(int n, double *a, double *d, double *c, double *b, double *x) {
 	for (int i = 1; i < n; i++) {
 		double m = a[i-1]/d[i-1];
 		d[i] -= m*c[i-1];
@@ -39,27 +37,27 @@ static double get_error(struct problem_spec *spec, double *u,
 	return err;
 }
 
-static void heat_crank-nicolson(struct problem_spec *spec,
-		double T, int n, int steps, char *gv_filename)
-{
+static void heat_crank_nicolson(struct problem_spec *spec,
+		double T, int n, int steps, char *gv_filename) {
 	FILE *fp;
-	double *u, *v, *d, *c;
+	double *u, *v, *d, *c, *temp_u;
 	double dx = (spec->b - spec->a)/(n+1);
 	double dt = T/steps;
 	double r = dt/(dx*dx);
+	double s_prime = 2*(1-r);
+
 	if ((fp = fopen(gv_filename, "w")) == NULL) {
-		fprintf(stderr, "unable to open file `%s' for writing\n",
-				gv_filename);
+		fprintf(stderr, "unable to open file `%s' for writing\n", gv_filename);
 		return;
 	}
-	fprintf(fp, "# geomview script written by the function %s()\n",
-			__func__);	// begin geomview script
+	fprintf(fp, "# geomview script written by the function %s()\n", __func__);	// begin geomview script
 	fprintf(fp, "{ appearance { +edge }\n");
 	fprintf(fp, "MESH %d %d\n", n+2, steps+1);
 	printf("%g < x < %g,  0 < t < %g,  dx = %g, dt = %g,  "
 			"r = dt/dx^2 = %g\n",
 			spec->a, spec->b, T, dx, dt, r);
 	make_vector(u, n+2);
+	make_vector(temp_u, n+2);
 	make_vector(v, n+2);
 	make_vector(d, n);
 	make_vector(c, n-1);
@@ -74,13 +72,28 @@ static void heat_crank-nicolson(struct problem_spec *spec,
 	for (int k = 1; k <= steps; k++) {
 		double *tmp;
 		double t = T*k/steps;
+		double t_next = T*(k+1)/steps;
+
 		v[0] = spec->bcL(t);
 		v[n+1] = spec->bcR(t);
-		u[1] += r*v[0];
-		u[n] += r*v[n+1];
+
 		for (int i = 0; i < n; i++)
 			d[i] = 2*(1 + r);
-                ...
+
+		for (int i = 1; i <= n; i++) {
+			temp_u[i] = s_prime*u[i];
+			if (i-1 > 1)
+				temp_u[i] += r * u[i-1];
+			if (i+1 <= n)
+				temp_u[i] += r * u[i+1];
+		}
+		
+		for (int i = 1; i <= n; i++) {
+			u[i] = temp_u[i];
+		}
+		u[1] += r*v[0] + r*spec->bcL(t_next);
+		u[n] += r*v[n+1] + r*spec->bcR(t_next);
+		
 		trisolve(n, c, d, c, u+1, v+1);
 		tmp = v;
 		v = u;
@@ -137,10 +150,10 @@ int main(int argc, char **argv)
 		show_usage(argv[0]);
 		return EXIT_FAILURE;
 	}
-	heat_crank-nicolson(heat1(), T, n, steps, "im1.gv");
-	heat_crank-nicolson(heat2(), T, n, steps, "im2.gv");
-	heat_crank-nicolson(heat3(), T, n, steps, "im3.gv");
-	heat_crank-nicolson(heat4(), T, n, steps, "im4.gv");
+	heat_crank_nicolson(heat1(), T, n, steps, "im1.gv");
+	heat_crank_nicolson(heat2(), T, n, steps, "im2.gv");
+	heat_crank_nicolson(heat3(), T, n, steps, "im3.gv");
+	heat_crank_nicolson(heat4(), T, n, steps, "im4.gv");
 
 	return EXIT_SUCCESS;
 }
