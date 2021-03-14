@@ -46,6 +46,7 @@ static void heat_crank_nicolson(struct problem_spec *spec,
 	double r = dt/(dx*dx);
 	double s_prime = 2*(1-r);
 
+	// function setup
 	if ((fp = fopen(gv_filename, "w")) == NULL) {
 		fprintf(stderr, "unable to open file `%s' for writing\n", gv_filename);
 		return;
@@ -61,25 +62,31 @@ static void heat_crank_nicolson(struct problem_spec *spec,
 	make_vector(v, n+2);
 	make_vector(d, n);
 	make_vector(c, n-1);
+
+	// init u
 	for (int j = 0; j < n+2; j++) {
 		double x = spec->a + (spec->b - spec->a)/(n+1)*j;
 		u[j] = spec->ic(x);
 	}
 	plot_curve(fp, u, n, steps, 0);
 
+	// init c
 	for (int j = 0; j < n-1; j++)
 		c[j] = -r;
+	
 	for (int k = 1; k <= steps; k++) {
 		double *tmp;
 		double t = T*k/steps;
-		double t_next = T*(k+1)/steps;
 
+		// set boundary values of next heat values
 		v[0] = spec->bcL(t);
 		v[n+1] = spec->bcR(t);
 
+		// reset d
 		for (int i = 0; i < n; i++)
 			d[i] = 2*(1 + r);
 
+		// multiply current heat values and s prime matrix
 		for (int i = 1; i <= n; i++) {
 			temp_u[i] = s_prime*u[i];
 			if (i-1 > 1)
@@ -88,19 +95,31 @@ static void heat_crank_nicolson(struct problem_spec *spec,
 				temp_u[i] += r * u[i+1];
 		}
 		
-		for (int i = 1; i <= n; i++) {
-			u[i] = temp_u[i];
-		}
-		u[1] += r*v[0] + r*spec->bcL(t_next);
-		u[n] += r*v[n+1] + r*spec->bcR(t_next);
+		temp_u[1] += r*u[0]   + r*v[0];
+		temp_u[n] += r*u[n+1] + r*v[n+1];
+
+		// printf("temp_u\n");
+		// print_vector("%f ", temp_u, n+2);
 		
-		trisolve(n, c, d, c, u+1, v+1);
+		// trisolve(n, c, d, c, u+1, v+1);
+		trisolve(n, c, d, c, temp_u+1, v+1);
+		
+		// swap u and v
 		tmp = v;
 		v = u;
 		u = tmp;
+
+		// printf("v\n");
+		// print_vector("%f ", v, n+2);
+		// printf("u\n");
+		// print_vector("%f ", u, n+2);
+
 		plot_curve(fp, u, n, steps, k);
 	}
-	fprintf(fp, "}\n");	// end geomview script
+
+
+	// clean up
+	fprintf(fp, "}\n");
 	fclose(fp);
 	printf("geomview script written to file %s\n", gv_filename);
 	if (spec->u_exact != NULL) {	
