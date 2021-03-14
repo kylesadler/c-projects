@@ -1,9 +1,12 @@
-#include "problem-spec.h"
-#include "array.h"
-#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include "array.h"
+#include "problem-spec.h"
 
+// Solves the nxn tridiagonal system Ax=b, where d is the main diagonal,
+// a is the lower subdiagonal, c is the upper subdiagonal.
 static void trisolve(int n, double *a, double *d, double *c, double *b, double *x) {
     for (int i = 1; i < n; i++) {
         double m = a[i-1]/d[i-1];
@@ -105,11 +108,11 @@ static void heat_implicit(struct problem_spec *spec, double T, int n, int steps,
     putchar('\n');
 }
 
-static void show_usage(char* progname) {
-    printf("Usage: ./heat-explicit T n s\n");
-    printf("\tT : solve over 0 <= t <= T\n");
-    printf("\tn : number of grid points a=x[0], x[1], ... , x[n], x[n+1] = b\n");
-    printf("\ts : number of time-slices 0=t[0], t[1], ... , t[s] = T\n");
+static void show_usage(char *progname) {
+	fprintf(stderr, "Usage: %s T n s\n", progname);
+	fprintf(stderr, "   T : solve over 0 <= t <= T\n");
+	fprintf(stderr, "   n : number of grid points a=x[0], x[1], ... , x[n], x[n+1]=b\n");
+	fprintf(stderr, "   s : number of time slices 0=t[0], t[1], ... , t[s]=T\n");
 }
 
 
@@ -149,6 +152,7 @@ int main(int argc, char** argv) {
     heat_implicit(heat2(), T, n, steps, "im2.gv");
     heat_implicit(heat3(), T, n, steps, "im3.gv");
     heat_implicit(heat4(), T, n, steps, "im4.gv");
+    
     return EXIT_SUCCESS;
 
 }
