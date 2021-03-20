@@ -1,18 +1,13 @@
 CFLAGS = -Wall -pedantic -std=c99 -O2
 LIBS = -lm
+CC = gcc
 
-ALL = heat-explicit heat-implicit heat-crank-nicolson
-
-all: $(ALL)
-
-heat-explicit: xmalloc.o problem-spec.o heat-explicit.o
+sparse-test: xmalloc.o sparse.o sparse-test.o
 	$(CC) $^ -o $@ $(LIBS)
 
-heat-implicit: xmalloc.o problem-spec.o heat-implicit.o
-	$(CC) $^ -o $@ $(LIBS)
-
-heat-crank-nicolson: xmalloc.o problem-spec.o heat-crank-nicolson.o
-	$(CC) $^ -o $@ $(LIBS)
+sparse-test.o: sparse-test.c sparse.h array.h xmalloc.h
+sparse.o: sparse.c sparse.h array.h xmalloc.h
+xmalloc.o: xmalloc.c xmalloc.h
 
 clean:
-	rm -f *.gv *.o $(ALL)
+	rm -f *.o $(ALL) sparse-test
