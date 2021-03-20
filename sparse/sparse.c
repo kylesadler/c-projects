@@ -15,18 +15,12 @@ void sparse_unpack(double **a, int m, int n, int *Ap, int *Ai, double *Ax) {
 		}
 }
 
-/* a[m][n] 
-	Ai and Ax are length of number of nonzero entries in a
-	Ap is length n
-	Ax values
-	Ai column indices
-*/
 void sparse_pack(double **a, int m, int n, int *Ap, int *Ai, double *Ax) {
 	int nz = 0; // number of non-zero entries found so far
 
-
 	// loop over columns
 	for (int j = 0; j < n; j++) {
+		
 		int nonzero_found = 0; // boolean; if we have found a nonzero entry this column
 		for (int i = 0; i < m; i++) {
 			if(a[i][j] != 0) {
@@ -41,9 +35,9 @@ void sparse_pack(double **a, int m, int n, int *Ap, int *Ai, double *Ax) {
 			}
 		}
 
-		// todo check this
 		if (nonzero_found == 0)
 			Ap[j+1] = nz;
+
 	}
 
 	Ap[n] = nz;
