@@ -26,9 +26,9 @@ int main(void)
             if (a[i][j] != 0.0)
                 nz++;
 
-    printf("A = \n");
-    print_matrix("%g ", a, m, n);
-    printf("\nA has %d nonzero entries.\n", nz);
+    printf("The sparse matrix is\n");
+    print_matrix("\t%g", a, m, n);
+    printf("matrix is %dx%d, nz = %d\n", m, n, nz);
 
     make_vector(Ax, nz);
     make_vector(Ai, nz);
@@ -36,23 +36,23 @@ int main(void)
 
     sparse_pack(a, m, n, Ap, Ai, Ax);
     
-    printf("\nAp = ");
-    print_vector("%d ", Ap, n+1);
-    printf("Ai = ");
-    print_vector("%d ", Ai, nz);
-    printf("Ax = ");
-    print_vector("%f ", Ax, nz);
-    
+    // print Ap, Ai, Ax
+    printf("\nAp =   ");
+    print_vector("   %d", Ap, n+1);
+    printf("Ai =   ");
+    print_vector("   %d", Ai, nz);
+    printf("Ax =   ");
+    print_vector("   %g", Ax, nz);
+    printf("\n");
 
     sparse_unpack(b, m, n, Ap, Ai, Ax);
-
-    print_matrix("%g ", b, m, n);
 
     for (int i = 0; i < m; i++)
         for (int j = 0; j < n; j++)
             c[i][j] = a[i][j] - b[i][j];
 
-    print_matrix("%f ", c, m, n);
+    printf("The difference of the original and reconstructed matrices:\n");
+    print_matrix("\t%g", c, m, n);
 
     free_matrix(a);
     free_matrix(b);
