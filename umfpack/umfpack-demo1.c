@@ -29,7 +29,7 @@ int main(void)
 
     // 3. compute nz as in Project Sparse Matrix
     int nz = 0;
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < n; i++)
        for (int j = 0; j < n; j++)
             if (a[i][j] != 0.0)
                 nz++;
@@ -38,11 +38,11 @@ int main(void)
 
     // .4. print out a, b, and nz as in Project Sparse Matrix ...
     printf("A is\n");
-    print_matrix("\t%g", a, n, n);
+    print_matrix(" %5g", a, n, n);
     printf("matrix is %dx%d, nz = %d\n\n", n, n, nz);
 
-    printf("n is\n");
-    print_vector("\t%g", b, n);
+    printf("b =   ");
+    print_vector(" %5g", b, n);
     printf("\n");
 
 
@@ -57,14 +57,13 @@ int main(void)
     
 
     // 6. print out Ap, Ai, Ax ...
-    printf("\nAp =   ");
-    print_vector("   %d", Ap, n+1);
+    printf("Ap =   ");
+    print_vector(" %5d", Ap, n+1);
     printf("Ai =   ");
-    print_vector("   %d", Ai, nz);
+    print_vector(" %5d", Ai, nz);
     printf("Ax =   ");
-    print_vector("   %g", Ax, nz);
+    print_vector(" %5g", Ax, nz);
     printf("\n");
-
 
 
 	umfpack_di_symbolic(n, n, Ap, Ai, Ax, &Symbolic, NULL, NULL);
@@ -74,7 +73,7 @@ int main(void)
 
     // 7. print out x ...
     printf("\nx =   ");
-    print_vector("   %d", x, n);
+    print_vector(" %5g", x, n);
 
 
 	umfpack_di_free_symbolic(&Symbolic);
