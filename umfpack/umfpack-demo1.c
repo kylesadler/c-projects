@@ -57,11 +57,11 @@ int main(void)
     
 
     // 6. print out Ap, Ai, Ax ...
-    printf("Ap =   ");
+    printf("Ap =  ");
     print_vector(" %5d", Ap, n+1);
-    printf("Ai =   ");
+    printf("Ai =  ");
     print_vector(" %5d", Ai, nz);
-    printf("Ax =   ");
+    printf("Ax =  ");
     print_vector(" %5g", Ax, nz);
     printf("\n");
 
