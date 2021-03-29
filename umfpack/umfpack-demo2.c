@@ -83,18 +83,19 @@ int main(void)
 
 
     status = umfpack_di_symbolic(n, n, Ap, Ai, Ax, &Symbolic, NULL, NULL);
-    
-    if (status != UMFPACK_OK)
+    if (status != UMFPACK_OK) {
         error_and_exit(status, __FILE__, __LINE__);
+    }
 
 	status = umfpack_di_numeric(Ap, Ai, Ax, Symbolic, &Numeric, NULL, NULL);
-    if (status != UMFPACK_OK)
+    if (status != UMFPACK_OK) {
         error_and_exit(status, __FILE__, __LINE__);
-	
+    }
+    
     status = umfpack_di_solve(UMFPACK_A, Ap, Ai, Ax, x, b, Numeric, NULL, NULL);
-    if (status != UMFPACK_OK)
+    if (status != UMFPACK_OK) {
         error_and_exit(status, __FILE__, __LINE__);
-
+    }
 
     // 7. print out x ...
     printf("\nx =   ");
