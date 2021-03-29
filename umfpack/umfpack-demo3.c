@@ -20,64 +20,74 @@ static void error_and_exit(int status, const char *file, int line) {
 int main(void)
 {
 	void *Symbolic, *Numeric;
-	double **a;
 	double *b, *x, *Ax;;
 	int *Ap, *Ai;
 	int n = 5;
     int status;
 
-	// 1. allocate memory for the matrix a and the vectors b and x
-    make_matrix(a, n, n);
-    make_vector(b, n);
+    int N = 20; // N = 20 is an overestimate; N = 12 will do
+    int k = 0;
+    int *Ti, *Tj;
+    double *Tx;
+
     make_vector(x, n);
-
-    // 2. populate the matrix a and vector b with the given numbers
-    a[0][0] = 2; a[0][1] = 3; a[0][2] = 0; a[0][3] = 0; a[0][4] = 0;
-    a[1][0] = 3; a[1][1] = 0; a[1][2] = 4; a[1][3] = 0; a[1][4] = 6;
-    a[2][0] = 0; a[2][1] = -1; a[2][2] = -3; a[2][3] = 2; a[2][4] = 0;
-    a[3][0] = 0; a[3][1] = 0; a[3][2] = 1; a[3][3] = 0; a[3][4] = 0;
-    a[4][0] = 0; a[4][1] = 4; a[4][2] = 2; a[4][3] = 0; a[4][4] = 1;
-
     
+    // create matrix
+    make_vector(Ti, N);
+    make_vector(Tj, N);
+    make_vector(Tx, N);
+
+    Ti[k] = 0; Tj[k] = 0; Tx[k] = 2.0; k++; // (0,0) entry is 2.0
+    Ti[k] = 0; Tj[k] = 1; Tx[k] = 3.0; k++; // (0,1) entry is 3.0
+
+    Ti[k] = 1; Tj[k] = 0; Tx[k] = 3.0; k++; // (1,0) entry is 3.0
+    Ti[k] = 1; Tj[k] = 2; Tx[k] = 4.0; k++;
+    Ti[k] = 1; Tj[k] = 4; Tx[k] = 6.0; k++;
+
+    Ti[k] = 2; Tj[k] = 1; Tx[k] = -1.0; k++;
+    Ti[k] = 2; Tj[k] = 2; Tx[k] = -3.0; k++;
+    Ti[k] = 2; Tj[k] = 3; Tx[k] = 2.0; k++;
+
+    Ti[k] = 3; Tj[k] = 2; Tx[k] = 1.0; k++;
+
+    Ti[k] = 4; Tj[k] = 1; Tx[k] = 4.0; k++;
+    Ti[k] = 4; Tj[k] = 2; Tx[k] = 2.0; k++;
+    Ti[k] = 4; Tj[k] = 4; Tx[k] = 1.0; k++;
+
+
+    // create b
+    make_vector(b, n);
     b[0] = 8; b[1] = 45; b[2] = -3; b[3] = 3; b[4] = 19;
 
 
-    // 3. compute nz as in Project Sparse Matrix
-    int nz = 0;
-    for (int i = 0; i < n; i++)
-       for (int j = 0; j < n; j++)
-            if (a[i][j] != 0.0)
-                nz++;
-
-
-
     // .4. print out a, b, and nz as in Project Sparse Matrix ...
-    printf("A is\n");
-    print_matrix(" %5g", a, n, n);
-    printf("matrix is %dx%d, nz = %d\n\n", n, n, nz);
-
     printf("b =   ");
     print_vector(" %5g", b, n);
     printf("\n");
 
 
     // 5. allocate memory for the vectors Ap, Ai, and Ax
-    make_vector(Ax, nz);
-    make_vector(Ai, nz);
+    // make_vector(Ax, nz);
+    // make_vector(Ai, nz);
+    make_vector(Ax, N);
+    make_vector(Ai, N);
     make_vector(Ap, n+1);
 
-
-
-	// sparse_pack(a, n, n, Ap, Ai, Ax);
     
+	// sparse_pack(a, n, n, Ap, Ai, Ax);
+    status = umfpack_di_triplet_to_col(n, n, N, Ti, Tj, Tx, Ap, Ai, Ax, NULL);
+    if (status != UMFPACK_OK) {
+        error_and_exit(status, __FILE__, __LINE__);
+    }
+
 
     // 6. print out Ap, Ai, Ax ...
     printf("Ap =  ");
     print_vector(" %5d", Ap, n+1);
     printf("Ai =  ");
-    print_vector(" %5d", Ai, nz);
+    print_vector(" %5d", Ai, N);
     printf("Ax =  ");
-    print_vector(" %5g", Ax, nz);
+    print_vector(" %5g", Ax, N);
     printf("\n");
 
 
@@ -105,8 +115,10 @@ int main(void)
 	umfpack_di_free_numeric(&Numeric);
  
 
-    // 8. also free the allocated memory for a, b, x, Ap, Ai, Ax ...
-    free_matrix(a);
+    // 8. free allocated vectors
+    free_vector(Ti, N);
+    free_vector(Tj, N);
+    free_vector(Tx, N);
     free_vector(b);
     free_vector(x);
 
