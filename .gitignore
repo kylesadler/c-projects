@@ -19,6 +19,8 @@ nelder-mead/rank-vertices-test
 *.obj
 *.elf
 
+!triangle/triangle.o
+
 # Linker output
 *.ilk
 *.map
