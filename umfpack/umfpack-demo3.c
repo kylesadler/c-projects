@@ -116,9 +116,9 @@ int main(void)
  
 
     // 8. free allocated vectors
-    free_vector(Ti, N);
-    free_vector(Tj, N);
-    free_vector(Tx, N);
+    free_vector(Ti);
+    free_vector(Tj);
+    free_vector(Tx);
     free_vector(b);
     free_vector(x);
 
