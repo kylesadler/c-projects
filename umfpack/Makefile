@@ -2,7 +2,7 @@ INCLUDE = ${SuiteSparse}/include
 #INCLUDE = /share/apps/SuiteSparse/5.8.1/gcc/include
 CFLAGS = -Wall -pedantic -std=c99 -O2 -I$(INCLUDE)
 LIBS = -L/share/apps/SuiteSparse/5.8.1/gcc/lib -lumfpack
-ALL = umfpack-demo1 umfpack-demo2 umfpack-demo3
+ALL = umfpack-demo1 umfpack-demo2 umfpack-demo3 umfpack-demo4
 
 all: $(ALL)
 
@@ -13,6 +13,9 @@ umfpack-demo2: xmalloc.o sparse.o umfpack-demo2.o
 	$(CC) $^ $(LIBS) -o $@
 
 umfpack-demo3: xmalloc.o umfpack-demo3.o
+	$(CC) $^ $(LIBS) -o $@
+
+umfpack-demo4: xmalloc.o umfpack-demo4.o
 	$(CC) $^ $(LIBS) -o $@
 
 clean:
