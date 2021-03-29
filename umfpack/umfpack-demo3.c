@@ -67,8 +67,6 @@ int main(void)
 
 
     // 5. allocate memory for the vectors Ap, Ai, and Ax
-    // make_vector(Ax, nz);
-    // make_vector(Ai, nz);
     make_vector(Ax, N);
     make_vector(Ai, N);
     make_vector(Ap, n+1);
