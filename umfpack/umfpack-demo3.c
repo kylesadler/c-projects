@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <umfpack.h>
-#include "sparse.h"
 #include "array.h"
 
 static void error_and_exit(int status, const char *file, int line) {
@@ -69,7 +68,7 @@ int main(void)
 
 
 
-	sparse_pack(a, n, n, Ap, Ai, Ax);
+	// sparse_pack(a, n, n, Ap, Ai, Ax);
     
 
     // 6. print out Ap, Ai, Ax ...
