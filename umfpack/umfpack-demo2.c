@@ -25,6 +25,7 @@ int main(void)
 	double *b, *x, *Ax;;
 	int *Ap, *Ai;
 	int n = 5;
+    int status;
 
 	// 1. allocate memory for the matrix a and the vectors b and x
     make_matrix(a, n, n);
