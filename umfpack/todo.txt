@@ -1,0 +1,17 @@
+
+2 x
+3 x
+4 x
+
+
+Implement, compile, and test the programs umfpack-demo2.c and umfpack-demo3.c.
+
+
+The matrix A on our programs has an entry of 3.0 in its first column and second row. Copy umfpack-demo3.c to umfpack-demo4.c and modify umfpack-demo4.c so that the entry is specified twice: once as 1.0, and once again as 2.0. Entries in the triplet form accumulate; therefore that change should not affect the result. See if your program confirms that.
+
+
+report:
+2 + 3 + 4
+code
+compilation
+running

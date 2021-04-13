@@ -1,0 +1,9 @@
+
+Listing 23.2 on page 306 gives an outline of the file problem-spec.c. Complete the rest of that file according to the instructions below.
+
+
+Part 23.1. The function square() in Listing 23.2 defines a domain in the form of a simple square (0,1)x(0,1).
+
+1. Add the definition of square() to problem-spec.c.
+
+2. Insert the necessary code in mesh-demo.c (see line 38 of Listing 23.7) that calls do_demo() to mesh the domain. Compare your result with Figure 23.1 (square) on page 302.
