@@ -172,7 +172,6 @@ struct problem_spec *three_holes(int n) {
 
     spec->segments[5].point_no_2 -= 6;
 
-
     spec->points[0].x = 0.0;
     spec->points[0].y = 0.0;
 
@@ -191,7 +190,12 @@ struct problem_spec *three_holes(int n) {
     spec->points[5].x = 0.0;
     spec->points[5].y = 2.0;
 
+
+
     // create holes
+    int holeX[] = { 0.5, 0.5, 1.5 };
+    int holeY[] = { 0.5, 1.5, 1.5 };
+
     for (int holeNum = 0; holeNum < 3; holeNum++) {
         int startIdx = holeNum*n + 6;
         int endIdx = startIdx + n;
@@ -199,8 +203,8 @@ struct problem_spec *three_holes(int n) {
             double t = 2*(i-startIdx)*Pi/n;
 
             spec->points[i].point_no  = i;
-            spec->points[i].x         = radius*cos(t);
-            spec->points[i].y         = radius*sin(t);
+            spec->points[i].x         = holeX[holeNum] + radius*cos(t);
+            spec->points[i].y         = holeY[holeNum] + radius*sin(t);
             spec->points[i].bc        = FEM_BC_DIRICHLET;
 
             spec->segments[i].segment_no = i;
@@ -216,10 +220,8 @@ struct problem_spec *three_holes(int n) {
     spec->holes[0].x = spec->holes[0].y = 0.0;
 
 
-
-
-    spec->npoints = n + 6;
-    spec->nsegments = n + 6;
+    spec->npoints = 3*n + 6;
+    spec->nsegments = 3*n + 6;
     spec->nholes = 3;
     spec->f = spec->g = spec->h = spec->eta = spec->u_exact = NULL;
 
