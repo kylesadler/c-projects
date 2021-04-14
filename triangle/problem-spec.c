@@ -154,10 +154,14 @@ struct problem_spec *three_holes(int n) {
     double Pi = 4*atan(1);
     double radius = 0.25;
     struct problem_spec *spec = xmalloc(sizeof *spec);
-    make_vector(spec->points, 3*n + 6);
-    make_vector(spec->segments, 3*n + 6);
-    make_vector(spec->holes, 3);
 
+    spec->npoints = 3*n + 6;
+    spec->nsegments = 3*n + 6;
+    spec->nholes = 3;
+
+    make_vector(spec->points, spec->npoints);
+    make_vector(spec->segments, spec->nsegments);
+    make_vector(spec->holes, spec->nholes);
 
     // create piece outline
     for (int i = 0; i < 6; i++) {
@@ -219,13 +223,8 @@ struct problem_spec *three_holes(int n) {
         }
 
         spec->segments[endIdx-1].point_no_2 -= n;
-
     }
 
-
-    spec->npoints = 3*n + 6;
-    spec->nsegments = 3*n + 6;
-    spec->nholes = 3;
     spec->f = spec->g = spec->h = spec->eta = spec->u_exact = NULL;
 
     printf("domain is an L-shape with three holes (actually %d-gons)\n", n);
