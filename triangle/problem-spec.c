@@ -1,6 +1,8 @@
 #include "problem-spec.h"
 #include "array.h"
 #include "xmalloc.h"
+#include <stdio.h>
+#include <math.h>
 
 struct problem_spec *triangle_with_hole(void) {
     static struct problem_spec_point points[] = {
@@ -30,7 +32,7 @@ struct problem_spec *triangle_with_hole(void) {
     };
 
     static struct problem_spec_hole holes[] = {
-        { 0.0, 0.75 };
+        { 0.0, 0.75 }
     };
 
     static struct problem_spec spec = {
@@ -62,8 +64,9 @@ struct problem_spec *annulus(int n) {
     make_vector(spec->holes, 1);
 
     for (int i = 0; i < n; i++) {
+        
+        // points
         double t = 2*i*Pi/n;
-
         spec->points[i].point_no = i;
         spec->points[i].x = a*cos(t);
         spec->points[i].y = a*sin(t);
@@ -72,11 +75,8 @@ struct problem_spec *annulus(int n) {
         spec->points[i+n].x = b*cos(t);
         spec->points[i+n].y = b*sin(t);
         spec->points[i+n].bc = FEM_BC_DIRICHLET;
-    }
-
-    for (int i = 0; i < n; i++) {
-        double t = 2*i*Pi/n;
-
+        
+        // segments
         spec->segments[i].segment_no = i;
         spec->segments[i].point_no_1 = i;
         spec->segments[i].point_no_2 = i+1;
@@ -127,12 +127,13 @@ struct problem_spec *square(void) {
         { 3, 3, 0, FEM_BC_DIRICHLET },
     };
 
-    static struct problem_spec_hole holes[] = {};
+    // static struct problem_spec_hole holes[] = {};
 
     static struct problem_spec spec = {
         .points = points,
         .segments = segments,
-        .holes = holes,
+        // .holes = holes,
+        .holes = NULL,
         .npoints = sizeof points / sizeof points[0],
         .nsegments = sizeof segments / sizeof segments[0],
         .nholes = 0,
@@ -197,8 +198,8 @@ struct problem_spec *three_holes(int n) {
 
 
     // create holes
-    int holeX[] = { 0.5, 0.5, 1.5 };
-    int holeY[] = { 0.5, 1.5, 1.5 };
+    double holeX[] = { 0.5, 0.5, 1.5 };
+    double holeY[] = { 0.5, 1.5, 1.5 };
 
     for (int holeNum = 0; holeNum < 3; holeNum++) {
 
