@@ -1,4 +1,8 @@
-#include
+#include "mesh.h"
+#include "mesh-to-eps.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 static void do_demo(struct problem_spec *spec, double a, char *eps_filename) {
     struct mesh *mesh = make_mesh(spec, a);

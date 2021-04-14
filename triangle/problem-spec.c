@@ -1,4 +1,4 @@
-#include "problem_spec.h"
+#include "problem-spec.h"
 #include "array.h"
 #include "xmalloc.h"
 
