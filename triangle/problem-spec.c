@@ -152,14 +152,14 @@ struct problem_spec *three_holes(int n) {
     // n is number of sides on holes
 
     double Pi = 4*atan(1);
-    double a = 0.325, b = 2*a;
+    double radius = 0.25;
     struct problem_spec *spec = xmalloc(sizeof *spec);
-    make_vector(spec->points, n + 6);
-    make_vector(spec->segments, n + 6);
+    make_vector(spec->points, 3*n + 6);
+    make_vector(spec->segments, 3*n + 6);
     make_vector(spec->holes, 3);
 
 
-
+    // create piece outline
     for (int i = 0; i < 6; i++) {
         spec->points[i].point_no = i;
         spec->points[i].bc = FEM_BC_DIRICHLET;
@@ -191,35 +191,27 @@ struct problem_spec *three_holes(int n) {
     spec->points[5].x = 0.0;
     spec->points[5].y = 2.0;
 
+    // create holes
+    for (int holeNum = 0; holeNum < 3; holeNum++) {
+        int startIdx = holeNum*n + 6;
+        int endIdx = startIdx + n;
+        for (int i = startIdx; i < endIdx; i++) {
+            double t = 2*(i-startIdx)*Pi/n;
 
-    for (int i = 6; i < n+6; i++) {
-        double t = 2*i*Pi/n;
+            spec->points[i].point_no  = i;
+            spec->points[i].x         = radius*cos(t);
+            spec->points[i].y         = radius*sin(t);
+            spec->points[i].bc        = FEM_BC_DIRICHLET;
 
-        spec->points[i].point_no = i;
-        spec->points[i].x = a*cos(t);
-        spec->points[i].y = a*sin(t);
-        spec->points[i].bc = FEM_BC_DIRICHLET;
-        spec->points[i+n].point_no = i+n;
-        spec->points[i+n].x = b*cos(t);
-        spec->points[i+n].y = b*sin(t);
-        spec->points[i+n].bc = FEM_BC_DIRICHLET;
+            spec->segments[i].segment_no = i;
+            spec->segments[i].point_no_1 = i;
+            spec->segments[i].point_no_2 = i+1;
+            spec->segments[i].bc = FEM_BC_DIRICHLET;
+        }
+
+        spec->segments[endIdx-1].point_no_2 -= n;
     }
 
-    for (int i = 6; i < n+6; i++) {
-        double t = 2*i*Pi/n;
-
-        spec->segments[i].segment_no = i;
-        spec->segments[i].point_no_1 = i;
-        spec->segments[i].point_no_2 = i+1;
-        spec->segments[i].bc = FEM_BC_DIRICHLET;
-        spec->segments[i+n].segment_no = i+n;
-        spec->segments[i+n].point_no_1 = i+n;
-        spec->segments[i+n].point_no_2 = i+n+1;
-        spec->segments[i+n].bc = FEM_BC_DIRICHLET;
-    }
-
-    spec->segments[n-1].point_no_2 -= n;
-    spec->segments[2*n-1].point_no_2 -= n;
 
     spec->holes[0].x = spec->holes[0].y = 0.0;
 
