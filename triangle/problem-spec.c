@@ -127,12 +127,9 @@ struct problem_spec *square(void) {
         { 3, 3, 0, FEM_BC_DIRICHLET },
     };
 
-    // static struct problem_spec_hole holes[] = {};
-
     static struct problem_spec spec = {
         .points = points,
         .segments = segments,
-        // .holes = holes,
         .holes = NULL,
         .npoints = sizeof points / sizeof points[0],
         .nsegments = sizeof segments / sizeof segments[0],
@@ -153,7 +150,8 @@ struct problem_spec *three_holes(int n) {
     // n is number of sides on holes
 
     double Pi = 4*atan(1);
-    double radius = 0.25;
+    double s = 0.64; //1;
+    double radius = s/4;
     struct problem_spec *spec = xmalloc(sizeof *spec);
 
     spec->npoints = 3*n + 6;
@@ -177,29 +175,29 @@ struct problem_spec *three_holes(int n) {
 
     spec->segments[5].point_no_2 -= 6;
 
-    spec->points[0].x = 0.0;
-    spec->points[0].y = 0.0;
+    spec->points[0].x = -s;
+    spec->points[0].y = -s;
 
-    spec->points[1].x = 1.0;
-    spec->points[1].y = 0.0;
+    spec->points[1].x = 0.0;
+    spec->points[1].y = -s;
 
-    spec->points[2].x = 1.0;
-    spec->points[2].y = 1.0;
+    spec->points[2].x = 0.0;
+    spec->points[2].y = 0.0;
 
-    spec->points[3].x = 2.0;
-    spec->points[3].y = 1.0;
+    spec->points[3].x = s;
+    spec->points[3].y = 0.0;
 
-    spec->points[4].x = 2.0;
-    spec->points[4].y = 2.0;
+    spec->points[4].x = s;
+    spec->points[4].y = s;
     
-    spec->points[5].x = 0.0;
-    spec->points[5].y = 2.0;
+    spec->points[5].x = -s;
+    spec->points[5].y = s;
 
 
 
     // create holes
-    double holeX[] = { 0.5, 0.5, 1.5 };
-    double holeY[] = { 0.5, 1.5, 1.5 };
+    double holeX[] = { -s/2, -s/2, s/2 };
+    double holeY[] = { -s/2, s/2, s/2 };
 
     for (int holeNum = 0; holeNum < 3; holeNum++) {
 
